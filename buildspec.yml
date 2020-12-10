@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 717566463867.dkr.ecr.ca-central-1.amazonaws.com
+      - export GIT_BRANCH=$(echo $CODEBUILD_WEBHOOK_TRIGGER | cut -c8-)
+      - export GIT_VERSION=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
+      - export REACT_APP_GIT_VERSION="$GIT_VERSION"
+      - COMPLETION_MESSAGE=$(curl -s https://gist.githubusercontent.com/pre63/f59380672d39f56d8cb6a95c147ba5e2/raw/completion_messages|bash)
+      - echo "$COMPLETION_MESSAGE\n$GIT_BRANCH:\ $GIT_VERSION" >> output
+  build:
+    commands:
+      - ./build.sh
+  post_build:
+      commands:
+        - curl -d "{ \"text\":\"$(cat output)\"}" -H "Content-Type:application/json" "https://chat.googleapis.com/v1/spaces/AAAAtLn3FDU/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=WiF8OCNMeeYCEhLDIuca73-K8w-hjaRcf8iVLKlUHW4%3D"
+cache:
+  paths:
+    - '*/node_modules/**/*'
