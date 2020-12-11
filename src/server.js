@@ -59,8 +59,8 @@ server.post('/a', (req, res) =>
           JSON.stringify(req.headers)]
       ))
     .cata({
-      Left: err => (console.error('Error inserting aim. ', err), res.json('')),
-      Right: data => (console.log('Insert aim succeeded. ', data.message), res.json(''))
+      Left: err => (console.error('Error inserting aim. ', err), res.json({message:'Ok'})),
+      Right: data => (console.log('Insert aim succeeded. ', data.message), res.json({message:'Ok'}))
     }))
 
 server.post('/l', (req, res) =>
@@ -72,8 +72,8 @@ server.post('/l', (req, res) =>
         [b.experiment, b.variant, b.anonymousId, JSON.stringify(req.headers)]
       ))
     .cata({
-      Left: err => (console.error('Error inserting launch. ', err), res.json('')),
-      Right: data => (console.log('Insert launch succeeded. ', data.message), res.json(''))
+      Left: err => (console.error('Error inserting launch. ', err), res.json({message:'Ok'})),
+      Right: data => (console.log('Insert launch succeeded. ', data.message), res.json({message:'Ok'}))
     }))
 
 server.post('/h', (req, res) =>
@@ -85,8 +85,8 @@ server.post('/h', (req, res) =>
         [b.experiment, b.variant, b.anonymousId, JSON.stringify(req.headers)]
       ))
     .cata({
-      Left: err => (console.error('Error inserting hit. ', err), res.json('')),
-      Right: data => (console.log('Insert hit succeeded. ', data.message), res.json(''))
+      Left: err => (console.error('Error inserting hit. ', err), res.json({message:'Ok'})),
+      Right: data => (console.log('Insert hit succeeded. ', data.message), res.json({message:'Ok'}))
     }))
 
 // Error handling
