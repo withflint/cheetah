@@ -47,6 +47,7 @@ server.get('/healthz', async (_, res, next) =>
 
 server.post('/a', (req, res) =>
   Maybe(req.body)
+    .chain(a => Maybe.encase(() => JSON.parse(a)))
     .chain(b =>
       query(
         `INSERT INTO cheetah.aim (experiment, allocation, variants, anonymous_id, headers) VALUES (?,?,?,?,?);`,
@@ -64,6 +65,7 @@ server.post('/a', (req, res) =>
 
 server.post('/l', (req, res) =>
   Maybe(req.body)
+    .chain(a => Maybe.encase(() => JSON.parse(a)))
     .chain(b =>
       query(
         `INSERT INTO cheetah.launch (experiment, variant, anonymous_id, headers) VALUES (?,?,?,?);`,
@@ -76,6 +78,7 @@ server.post('/l', (req, res) =>
 
 server.post('/h', (req, res) =>
   Maybe(req.body)
+    .chain(a => Maybe.encase(() => JSON.parse(a)))
     .chain(b =>
       query(
         `INSERT INTO cheetah.hit (experiment, variant, anonymous_id, headers) VALUES (?,?,?,?);`,
