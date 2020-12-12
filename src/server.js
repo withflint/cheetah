@@ -45,6 +45,42 @@ server.get('/healthz', async (_, res, next) =>
     Right: () => res.send(`Ok, ${env}, ${git_version}, ${Date.now()}`)
   }))
 
+const types = {
+  aim: b =>
+    query(
+      `INSERT INTO cheetah.aim (experiment, allocation, variants, variant, anonymous_id, headersj, traits) VALUES (?,?,?,?,?,?,?);`,
+      [
+        b.experiment,
+        b.allocation,
+        JSON.stringify(b.variants),
+        b.variant,
+        b.anonymousId,
+        b.headers,
+        JSON.stringify(b.traits)
+      ]
+    ),
+  launch: b =>
+    query(
+      `INSERT INTO cheetah.launch (experiment, variant, anonymous_id, headersj, traits) VALUES (?,?,?,?,?);`,
+      [b.experiment, b.variant, b.anonymousId, b.headers, JSON.stringify(b.traits)]
+    ),
+  hit: b =>
+    query(
+      `INSERT INTO cheetah.hit (experiment, variant, anonymous_id, headersj, traits) VALUES (?,?,?,?,?);`,
+      [b.experiment, b.variant, b.anonymousId, b.headers, JSON.stringify(b.traits)]
+    ),
+  default: b => Left(`Unknown type: ${JSON.stringify(b)}`)
+}
+
+server.post('/m', (req, res) =>
+  Maybe(req.body)
+    .chain(b => (types[b.type] || types.default)({...b, headers: JSON.stringify( req.headers)}))
+    .cata({
+      Left: err => (console.error('Error inserting aim. ', err), res.json({ message: 'Ok' })),
+      Right: data => (
+        console.log('Insert aim succeeded. ', data.message), res.json({ message: 'Ok' }))
+    }))
+
 server.post('/a', (req, res) =>
   Maybe(req.body)
     .chain(b =>
@@ -58,8 +94,9 @@ server.post('/a', (req, res) =>
           JSON.stringify(req.headers)]
       ))
     .cata({
-      Left: err => (console.error('Error inserting aim. ', err), res.json({message:'Ok'})),
-      Right: data => (console.log('Insert aim succeeded. ', data.message), res.json({message:'Ok'}))
+      Left: err => (console.error('Error inserting aim. ', err), res.json({ message: 'Ok' })),
+      Right: data => (
+        console.log('Insert aim succeeded. ', data.message), res.json({ message: 'Ok' }))
     }))
 
 server.post('/l', (req, res) =>
@@ -70,8 +107,9 @@ server.post('/l', (req, res) =>
         [b.experiment, b.variant, b.anonymousId, JSON.stringify(req.headers)]
       ))
     .cata({
-      Left: err => (console.error('Error inserting launch. ', err), res.json({message:'Ok'})),
-      Right: data => (console.log('Insert launch succeeded. ', data.message), res.json({message:'Ok'}))
+      Left: err => (console.error('Error inserting launch. ', err), res.json({ message: 'Ok' })),
+      Right: data => (
+        console.log('Insert launch succeeded. ', data.message), res.json({ message: 'Ok' }))
     }))
 
 server.post('/h', (req, res) =>
@@ -82,8 +120,9 @@ server.post('/h', (req, res) =>
         [b.experiment, b.variant, b.anonymousId, JSON.stringify(req.headers)]
       ))
     .cata({
-      Left: err => (console.error('Error inserting hit. ', err), res.json({message:'Ok'})),
-      Right: data => (console.log('Insert hit succeeded. ', data.message), res.json({message:'Ok'}))
+      Left: err => (console.error('Error inserting hit. ', err), res.json({ message: 'Ok' })),
+      Right: data => (
+        console.log('Insert hit succeeded. ', data.message), res.json({ message: 'Ok' }))
     }))
 
 // Error handling

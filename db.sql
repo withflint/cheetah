@@ -30,3 +30,12 @@ CREATE TABLE IF NOT EXISTS `hit` (
   `headers` varchar(2000) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+
+use cheetah;
+alter table `aim` add column `headersj` json default null;
+alter table `aim` add column `traits` json default null;
+alter table `launch` add column `headersj` json default null;
+alter table `launch` add column `traits` json default null;
+alter table `hit` add column `headersj` json default null;
+alter table `hit` add column `traits` json default null;
