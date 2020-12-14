@@ -39,3 +39,13 @@ alter table `launch` add column `headersj` json default null;
 alter table `launch` add column `traits` json default null;
 alter table `hit` add column `headersj` json default null;
 alter table `hit` add column `traits` json default null;
+
+alter table `aim` modify column `experiment` char(100) NULL;
+alter table `aim` modify column `variant` char(10) NULL;
+alter table `aim` modify column `allocation` tinyint NULL;
+alter table `launch` modify column `experiment` char(100) NULL;
+alter table `launch` modify column `variant` char(10) NULL;
+alter table `hit` modify column `experiment` char(100) NULL;
+alter table `hit` modify column `variant` char(10) NULL;
+
+

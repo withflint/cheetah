@@ -76,9 +76,9 @@ server.post('/m', (req, res) =>
   Maybe(req.body)
     .chain(b => (types[b.type] || types.default)({...b, headers: JSON.stringify( req.headers)}))
     .cata({
-      Left: err => (console.error('Error inserting aim. ', err), res.json({ message: 'Ok' })),
+      Left: err => (console.error('Error inserting m. ', err), res.json({ success: false })),
       Right: data => (
-        console.log('Insert aim succeeded. ', data.message), res.json({ message: 'Ok' }))
+        console.log('Insert m succeeded. ', data.message), res.json({ success: true }))
     }))
 
 server.post('/a', (req, res) =>
@@ -94,9 +94,9 @@ server.post('/a', (req, res) =>
           JSON.stringify(req.headers)]
       ))
     .cata({
-      Left: err => (console.error('Error inserting aim. ', err), res.json({ message: 'Ok' })),
+      Left: err => (console.error('Error inserting aim. ', err), res.json({ success: false })),
       Right: data => (
-        console.log('Insert aim succeeded. ', data.message), res.json({ message: 'Ok' }))
+        console.log('Insert aim succeeded. ', data.message), res.json({ success: true }))
     }))
 
 server.post('/l', (req, res) =>
@@ -107,9 +107,9 @@ server.post('/l', (req, res) =>
         [b.experiment, b.variant, b.anonymousId, JSON.stringify(req.headers)]
       ))
     .cata({
-      Left: err => (console.error('Error inserting launch. ', err), res.json({ message: 'Ok' })),
+      Left: err => (console.error('Error inserting launch. ', err), res.json({ success: false })),
       Right: data => (
-        console.log('Insert launch succeeded. ', data.message), res.json({ message: 'Ok' }))
+        console.log('Insert launch succeeded. ', data.message), res.json({ success: true }))
     }))
 
 server.post('/h', (req, res) =>
@@ -120,9 +120,9 @@ server.post('/h', (req, res) =>
         [b.experiment, b.variant, b.anonymousId, JSON.stringify(req.headers)]
       ))
     .cata({
-      Left: err => (console.error('Error inserting hit. ', err), res.json({ message: 'Ok' })),
+      Left: err => (console.error('Error inserting hit. ', err), res.json({ success: false })),
       Right: data => (
-        console.log('Insert hit succeeded. ', data.message), res.json({ message: 'Ok' }))
+        console.log('Insert hit succeeded. ', data.message), res.json({ success: true }))
     }))
 
 // Error handling
