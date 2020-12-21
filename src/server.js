@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const helmet = require('helmet')
 const cors = require('cors')
 const morgan = require('morgan')
-const { Future, Maybe } = require('exalted.future')
+const { Future, Maybe, Left } = require('exalted.future')
 const { query, pool } = require('./pool')
 
 delete Array.prototype.toJSON
